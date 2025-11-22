@@ -11,7 +11,7 @@ interface AppShellProps {
 
 export function AppShell({ children, currentCategory, currentAlgorithm }: AppShellProps) {
     return (
-        <div className="min-h-screen bg-gray-50">
+        <div className="min-h-screen bg-gray-50 dark:bg-slate-950">
             <Navbar />
             <div className="flex">
                 <Sidebar currentCategory={currentCategory} currentAlgorithm={currentAlgorithm} />

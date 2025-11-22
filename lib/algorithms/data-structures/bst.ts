@@ -227,7 +227,8 @@ export function bstOperationsSteps(operation: string, value?: number): Algorithm
             });
 
             if (value === currentNode.value) {
-                highlightedNodes.find(n => n.id === current)!.highlight = 'found';
+                const foundNode = highlightedNodes.find(n => n.id === current);
+                if (foundNode) foundNode.highlight = 'compare';
                 steps.push({
                     tree: {
                         nodes: JSON.parse(JSON.stringify(highlightedNodes)),

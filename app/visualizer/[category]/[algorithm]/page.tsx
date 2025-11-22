@@ -1,9 +1,12 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useMemo, useCallback } from 'react';
 import { algorithms } from '@/lib/algorithms';
 import { StepState } from '@/lib/algorithms/types';
 import { parseInput } from '@/lib/utils/parseInput';
+import { analytics } from '@/lib/utils/analytics';
+import { exportCanvasAsImage, downloadJSON } from '@/lib/utils/export';
+import { useReducedMotion } from '@/lib/hooks/useReducedMotion';
 import { AppShell } from '@/components/layout/AppShell';
 import { InputPanel } from '@/components/visualizer/InputPanel';
 import { VisualizerCanvas } from '@/components/visualizer/VisualizerCanvas';
@@ -21,6 +24,7 @@ interface PageProps {
 
 export default function AlgorithmVisualizerPage({ params }: PageProps) {
     const { category, algorithm } = params;
+    const prefersReducedMotion = useReducedMotion();
 
     // Get algorithm config
     const categoryAlgos = algorithms[category as keyof typeof algorithms];
@@ -35,28 +39,41 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
 
     const [arrayInput, setArrayInput] = useState('10 3 5 1 8 2');
     const [targetInput, setTargetInput] = useState('5');
-    const [operation, setOperation] = useState(algoConfig.operations?.[0] || '');
+    const [operation, setOperation] = useState((algoConfig as any).operations?.[0] || '');
     const [operationValue, setOperationValue] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [steps, setSteps] = useState<StepState[]>([]);
     const [currentStepIndex, setCurrentStepIndex] = useState(0);
     const [isPlaying, setIsPlaying] = useState(false);
-    const [speed, setSpeed] = useState(1);
+    const [speed, setSpeed] = useState(prefersReducedMotion ? 0.5 : 1);
     const [comparisons, setComparisons] = useState(0);
     const [swaps, setSwaps] = useState(0);
+    const [showAnalytics, setShowAnalytics] = useState(false);
 
-    const needsTarget = algoConfig.inputType === 'array-target';
+    const needsTarget = (algoConfig as any).inputType === 'array-target';
 
-    const handleRun = () => {
+    const handleExport = useCallback(() => {
+        exportCanvasAsImage('visualizer-canvas', `${algorithm}-visualization.png`);
+        analytics.log('action', 'Exported visualization as image');
+    }, [algorithm]);
+
+    const handleExportSteps = useCallback(() => {
+        downloadJSON(steps, `${algorithm}-steps.json`);
+        analytics.log('action', 'Exported steps as JSON');
+    }, [steps, algorithm]);
+
+    const handleRun = useCallback(() => {
         setErrorMessage('');
         try {
             let result;
+            const config = algoConfig as any;
 
-            if (algoConfig.visualizerKind === 'array') {
+            if (config.visualizerKind === 'array') {
                 const array = parseInput(arrayInput);
 
                 if (array.length === 0) {
                     setErrorMessage('Please enter at least one number');
+                    analytics.log('error', 'Empty input array');
                     return;
                 }
 
@@ -64,26 +81,27 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
                     const target = parseInt(targetInput);
                     if (isNaN(target)) {
                         setErrorMessage('Target must be a valid number');
+                        analytics.log('error', 'Invalid target value');
                         return;
                     }
-                    result = algoConfig.execute(array, target);
+                    result = config.execute(array, target);
                 } else {
-                    result = algoConfig.execute(array);
+                    result = config.execute(array);
                 }
-            } else if (algoConfig.visualizerKind === 'linked-list') {
+            } else if (config.visualizerKind === 'linked-list') {
                 const value = operationValue ? parseInt(operationValue) : undefined;
-                result = algoConfig.execute({ op: operation, value });
-            } else if (algoConfig.visualizerKind === 'stack') {
+                result = config.execute({ op: operation, value });
+            } else if (config.visualizerKind === 'stack') {
                 // Default stack operations
-                result = algoConfig.execute(algoConfig.defaultInput);
-            } else if (algoConfig.visualizerKind === 'tree') {
+                result = config.execute(config.defaultInput);
+            } else if (config.visualizerKind === 'tree') {
                 const value = operationValue ? parseInt(operationValue) : 25;
-                result = algoConfig.execute({ op: operation || 'insert', value });
-            } else if (algoConfig.visualizerKind === 'graph') {
-                result = algoConfig.execute(algoConfig.defaultInput);
+                result = config.execute({ op: operation || 'insert', value });
+            } else if (config.visualizerKind === 'graph') {
+                result = config.execute(config.defaultInput);
             } else {
                 // Try with default input
-                result = algoConfig.execute(algoConfig.defaultInput);
+                result = config.execute(config.defaultInput);
             }
 
             setSteps(result.steps);
@@ -91,12 +109,15 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
             setComparisons(result.meta.comparisons);
             setSwaps(result.meta.swaps || 0);
             setIsPlaying(false);
+            analytics.log('action', `Ran ${config.name}`, { steps: result.steps.length });
         } catch (error) {
-            setErrorMessage(error instanceof Error ? error.message : 'An error occurred');
+            const msg = error instanceof Error ? error.message : 'An error occurred';
+            setErrorMessage(msg);
+            analytics.log('error', msg, { algorithm: (algoConfig as any).name });
         }
-    };
+    }, [algoConfig, arrayInput, targetInput, operation, operationValue, needsTarget]);
 
-    const handleRandomInput = () => {
+    const handleRandomInput = useCallback(() => {
         const size = 8 + Math.floor(Math.random() * 5);
         const randomArray = Array.from({ length: size }, () => Math.floor(Math.random() * 100) + 1);
         setArrayInput(randomArray.join(' '));
@@ -105,9 +126,10 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
             const randomTarget = randomArray[Math.floor(Math.random() * randomArray.length)];
             setTargetInput(randomTarget.toString());
         }
-    };
+        analytics.log('action', 'Generated random input');
+    }, [needsTarget]);
 
-    const handleClear = () => {
+    const handleClear = useCallback(() => {
         setArrayInput('');
         setTargetInput('');
         setOperationValue('');
@@ -117,26 +139,30 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
         setIsPlaying(false);
         setComparisons(0);
         setSwaps(0);
-    };
+        analytics.log('action', 'Cleared inputs');
+    }, []);
 
-    const handleReset = () => {
+    const handleReset = useCallback(() => {
         setCurrentStepIndex(0);
         setIsPlaying(false);
-    };
+        analytics.log('action', 'Reset visualization');
+    }, []);
 
-    const handlePrevious = () => {
+    const handlePrevious = useCallback(() => {
         if (currentStepIndex > 0) {
             setCurrentStepIndex(currentStepIndex - 1);
+            analytics.log('step', 'Previous step', { step: currentStepIndex - 1 });
         }
-    };
+    }, [currentStepIndex]);
 
-    const handleNext = () => {
+    const handleNext = useCallback(() => {
         if (currentStepIndex < steps.length - 1) {
             setCurrentStepIndex(currentStepIndex + 1);
+            analytics.log('step', 'Next step', { step: currentStepIndex + 1 });
         }
-    };
+    }, [currentStepIndex, steps.length]);
 
-    const handlePlayPause = () => {
+    const handlePlayPause = useCallback(() => {
         if (steps.length === 0) return;
 
         if (currentStepIndex === steps.length - 1) {
@@ -145,12 +171,14 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
         } else {
             setIsPlaying(!isPlaying);
         }
-    };
+        analytics.log('action', isPlaying ? 'Paused' : 'Playing');
+    }, [steps.length, currentStepIndex, isPlaying]);
 
     // Auto-advance when playing
     useEffect(() => {
         if (!isPlaying || steps.length === 0) return;
 
+        const duration = prefersReducedMotion ? 2000 : 1000 / speed;
         const interval = setInterval(() => {
             setCurrentStepIndex((prev) => {
                 if (prev >= steps.length - 1) {
@@ -159,12 +187,21 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
                 }
                 return prev + 1;
             });
-        }, 1000 / speed);
+        }, duration);
 
         return () => clearInterval(interval);
-    }, [isPlaying, speed, steps.length]);
+    }, [isPlaying, speed, steps.length, prefersReducedMotion]);
 
-    const currentStep = steps[currentStepIndex];
+    const currentStep = useMemo(() => steps[currentStepIndex], [steps, currentStepIndex]);
+
+    // Track step changes
+    useEffect(() => {
+        if (steps.length > 0 && currentStep) {
+            analytics.log('step', currentStep.message, { step: currentStepIndex });
+        }
+    }, [currentStepIndex, steps.length, currentStep]);
+
+    const config = algoConfig as any;
 
     return (
         <AppShell currentCategory={category} currentAlgorithm={algorithm}>
@@ -172,19 +209,19 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
                 {/* Header */}
                 <div className="mb-6">
                     <div className="flex items-center gap-3 mb-2">
-                        <h1 className="text-3xl font-bold text-gray-900">{algoConfig.name}</h1>
-                        {algoConfig.module && (
-                            <span className="px-2 py-1 bg-primary-100 text-primary-700 text-xs font-semibold rounded">
-                                Module {algoConfig.module}
+                        <h1 className="text-3xl font-bold text-gray-900 dark:text-gray-100">{config.name}</h1>
+                        {config.module && (
+                            <span className="px-2 py-1 bg-primary-100 dark:bg-primary-900 text-primary-700 dark:text-primary-300 text-xs font-semibold rounded">
+                                Module {config.module}
                             </span>
                         )}
-                        {algoConfig.exerciseNumber && (
-                            <span className="px-2 py-1 bg-purple-100 text-purple-700 text-xs font-semibold rounded">
-                                Exercise {algoConfig.exerciseNumber}
+                        {config.exerciseNumber && (
+                            <span className="px-2 py-1 bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 text-xs font-semibold rounded">
+                                Exercise {config.exerciseNumber}
                             </span>
                         )}
                     </div>
-                    <p className="text-gray-600">{algoConfig.description}</p>
+                    <p className="text-gray-600 dark:text-gray-400">{config.description}</p>
                 </div>
 
                 {/* Main Content */}
@@ -192,14 +229,14 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
                     {/* Left Column */}
                     <div className="space-y-6">
                         <InputPanel
-                            visualizerKind={algoConfig.visualizerKind}
+                            visualizerKind={config.visualizerKind}
                             arrayInput={arrayInput}
                             targetInput={targetInput}
                             operation={operation}
                             operationValue={operationValue}
                             needsTarget={needsTarget}
                             errorMessage={errorMessage}
-                            operations={algoConfig.operations}
+                            operations={config.operations}
                             onArrayInputChange={setArrayInput}
                             onTargetInputChange={setTargetInput}
                             onOperationChange={setOperation}
@@ -211,8 +248,8 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
 
                         <VisualizerCanvas
                             step={currentStep}
-                            algorithmType={algoConfig.type}
-                            visualizerKind={algoConfig.visualizerKind}
+                            algorithmType={config.type}
+                            visualizerKind={config.visualizerKind}
                         />
 
                         <PlaybackControls
@@ -231,7 +268,7 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
                     {/* Right Column */}
                     <div className="space-y-6">
                         <CodePanel
-                            code={algoConfig.code}
+                            code={config.code}
                             currentLine={currentStep?.lineNumber}
                         />
 

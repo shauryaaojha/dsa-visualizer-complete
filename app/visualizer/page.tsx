@@ -60,22 +60,22 @@ export default function VisualizerPage() {
                                     if (!categoryAlgos) return null;
 
                                     return Object.keys(categoryAlgos).map((algoKey) => {
-                                        const algo = categoryAlgos[algoKey as keyof typeof categoryAlgos];
+                                        const algo = categoryAlgos[algoKey as keyof typeof categoryAlgos] as any;
 
                                         return (
                                             <Card key={algoKey} className="p-6 hover:shadow-xl transition-all group">
                                                 <div className="mb-3">
-                                                    <h3 className="text-lg font-bold text-gray-900 mb-1">
+                                                    <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">
                                                         {algo.name}
                                                     </h3>
                                                     {algo.exerciseNumber && (
-                                                        <span className="text-xs bg-purple-100 text-purple-700 px-2 py-1 rounded font-semibold">
+                                                        <span className="text-xs bg-purple-100 dark:bg-purple-900 text-purple-700 dark:text-purple-300 px-2 py-1 rounded font-semibold">
                                                             Exercise {algo.exerciseNumber}
                                                         </span>
                                                     )}
                                                 </div>
 
-                                                <p className="text-gray-600 text-sm mb-4 line-clamp-2">
+                                                <p className="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-2">
                                                     {algo.description}
                                                 </p>
 
@@ -90,7 +90,7 @@ export default function VisualizerPage() {
                                                     <div className="mb-4">
                                                         <div className="text-xs font-semibold text-gray-700 mb-1">Operations:</div>
                                                         <div className="flex flex-wrap gap-1">
-                                                            {algo.operations.slice(0, 3).map((op) => (
+                                                            {algo.operations.slice(0, 3).map((op: string) => (
                                                                 <span key={op} className="text-xs bg-gray-100 text-gray-700 px-2 py-0.5 rounded">
                                                                     {op}
                                                                 </span>

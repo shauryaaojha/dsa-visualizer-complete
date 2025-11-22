@@ -5,9 +5,7 @@ export function stackOperationsSteps(operations: Array<{ op: 'push' | 'pop' | 'p
     const elements: number[] = [];
     let top = -1;
     const capacity = 10;
-    let oper
-
-    ations = 0;
+    let operationsCount = 0;
 
     steps.push({
         stack: {
@@ -38,7 +36,7 @@ export function stackOperationsSteps(operations: Array<{ op: 'push' | 'pop' | 'p
 
             top++;
             elements.push(operation.value);
-            operations++;
+            operationsCount++;
 
             steps.push({
                 stack: {
@@ -70,7 +68,7 @@ export function stackOperationsSteps(operations: Array<{ op: 'push' | 'pop' | 'p
             const popped = elements[top];
             elements.pop();
             top--;
-            operations++;
+            operationsCount++;
 
             steps.push({
                 stack: {
@@ -114,6 +112,6 @@ export function stackOperationsSteps(operations: Array<{ op: 'push' | 'pop' | 'p
 
     return {
         steps,
-        meta: { comparisons: 0, operations },
+        meta: { comparisons: 0, operations: operationsCount },
     };
 }
