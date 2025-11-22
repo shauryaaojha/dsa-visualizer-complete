@@ -55,8 +55,8 @@ export function Navbar() {
                         <button
                             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
                             className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-slate-800 transition-colors touch-target"
-                            aria-label="Toggle menu"
-                            aria-expanded={mobileMenuOpen ? 'true' : 'false'}
+                            aria-label="Toggle mobile menu"
+                            aria-expanded={mobileMenuOpen}
                         >
                             {mobileMenuOpen ? '✕' : '☰'}
                         </button>

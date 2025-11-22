@@ -11,16 +11,15 @@ export function VisualizerCanvas({ step, algorithmType, visualizerKind = 'array'
     if (!step) {
         return (
             <Card className="p-6 h-96 flex items-center justify-center">
-                <p className="text-gray-500">Enter input and click Run to start visualization</p>
+                <p className="text-gray-500 dark:text-gray-400">Enter input and click Run to start visualization</p>
             </Card>
         );
     }
 
     return (
         <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Visualization</h2>
-            <div className="min-h-[300px]">
-                {(visualizerKind === 'array' || step.array) && <ArrayVisualizer step={step} />}
+            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Visualization</h2>
+            <div className="min-h-[300px]" id="visualizer-canvas">{(visualizerKind === 'array' || step.array) && <ArrayVisualizer step={step} />}
                 {visualizerKind === 'linked-list' && step.linkedList && <LinkedListVisualizer step={step} />}
                 {visualizerKind === 'stack' && step.stack && <StackVisualizer step={step} />}
                 {visualizerKind === 'queue' && step.queue && <QueueVisualizer step={step} />}
@@ -73,10 +72,15 @@ function ArrayVisualizer({ step }: { step: StepState }) {
                 const heightPercent = ((value - minValue) / (maxValue - minValue || 1)) * 80 + 20;
 
                 return (
-                    <div key={index} className="flex flex-col items-center gap-2" style={{ flex: '1 1 0', maxWidth: '80px' }}>
-                        <div className={`w-full rounded-t-md border-2 transition-all duration-300 ${highlighted && type ? getHighlightColor(type) : 'bg-primary-200 border-primary-400'}`} style={{ height: `${heightPercent}%`, minHeight: '40px' }} />
-                        <div className="text-sm font-semibold text-gray-700">{value}</div>
-                        {highlighted && type && <div className="text-xs text-gray-500 capitalize">{type}</div>}
+                    <div key={index} className="flex flex-col items-center gap-2 array-bar">
+                        <div 
+                            className={`w-full rounded-t-md border-2 transition-all duration-300 ${highlighted && type ? getHighlightColor(type) : 'bg-primary-200 dark:bg-primary-300 border-primary-400 dark:border-primary-500'}`}
+                            style={{ height: `${heightPercent}%`, minHeight: '40px' }}
+                            aria-label={`Value ${value} at index ${index}${highlighted ? ` - ${type}` : ''}`}
+                            role="presentation"
+                        />
+                        <div className="text-sm font-semibold text-gray-700 dark:text-gray-300">{value}</div>
+                        {highlighted && type && <div className="text-xs text-gray-500 dark:text-gray-400 capitalize">{type}</div>}
                     </div>
                 );
             })}
@@ -342,7 +346,7 @@ function GraphVisualizer({ step }: { step: StepState }) {
     };
 
     return (
-        <div className="relative p-6" style={{ height: '400px' }}>
+        <div className="relative p-6 visualizer-container">
             <svg className="absolute inset-0" width="100%" height="100%">
                 {edges.map((edge, idx) => {
                     const fromNode = nodes.find(n => n.id === edge.from);
@@ -366,7 +370,7 @@ function GraphVisualizer({ step }: { step: StepState }) {
                 <div
                     key={node.id}
                     className={`absolute px-4 py-3 rounded-full border-2 ${getHighlightColor(node.highlight)} transition-all shadow-lg transform -translate-x-1/2 -translate-y-1/2`}
-                    style={{ left: node.x, top: node.y }}
+                    style={{ left: `${node.x}px`, top: `${node.y}px` }}
                 >
                     <div className="text-sm font-bold">{node.label}</div>
                     {node.distance !== undefined && node.distance !== Infinity && (

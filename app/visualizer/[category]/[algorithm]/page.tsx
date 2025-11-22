@@ -49,6 +49,7 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
     const [comparisons, setComparisons] = useState(0);
     const [swaps, setSwaps] = useState(0);
     const [showAnalytics, setShowAnalytics] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
 
     const needsTarget = (algoConfig as any).inputType === 'array-target';
 
@@ -64,9 +65,13 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
 
     const handleRun = useCallback(() => {
         setErrorMessage('');
-        try {
-            let result;
-            const config = algoConfig as any;
+        setIsLoading(true);
+        
+        // Use setTimeout to allow UI to update with loading state
+        setTimeout(() => {
+            try {
+                let result;
+                const config = algoConfig as any;
 
             if (config.visualizerKind === 'array') {
                 const array = parseInput(arrayInput);
@@ -109,12 +114,15 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
             setComparisons(result.meta.comparisons);
             setSwaps(result.meta.swaps || 0);
             setIsPlaying(false);
+            setIsLoading(false);
             analytics.log('action', `Ran ${config.name}`, { steps: result.steps.length });
         } catch (error) {
             const msg = error instanceof Error ? error.message : 'An error occurred';
             setErrorMessage(msg);
+            setIsLoading(false);
             analytics.log('error', msg, { algorithm: (algoConfig as any).name });
         }
+        }, 50);
     }, [algoConfig, arrayInput, targetInput, operation, operationValue, needsTarget]);
 
     const handleRandomInput = useCallback(() => {
@@ -237,6 +245,7 @@ export default function AlgorithmVisualizerPage({ params }: PageProps) {
                             needsTarget={needsTarget}
                             errorMessage={errorMessage}
                             operations={config.operations}
+                            isLoading={isLoading}
                             onArrayInputChange={setArrayInput}
                             onTargetInputChange={setTargetInput}
                             onOperationChange={setOperation}

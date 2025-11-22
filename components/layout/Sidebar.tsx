@@ -107,9 +107,9 @@ export function Sidebar({ currentCategory, currentAlgorithm }: SidebarProps) {
                 {/* Mobile Toggle Button */}
                 <button
                     onClick={() => setIsOpen(!isOpen)}
-                    className="fixed bottom-4 left-4 z-30 bg-primary-600 text-white p-3 rounded-full shadow-lg hover:bg-primary-700 transition-colors touch-target"
+                    className="fixed bottom-4 left-4 z-30 bg-primary-600 text-white p-3 rounded-full shadow-lg hover:bg-primary-700 transition-all touch-target"
                     aria-label="Toggle sidebar"
-                    aria-expanded={isOpen ? 'true' : 'false'}
+                    aria-expanded={isOpen}
                 >
                     {isOpen ? '✕' : '☰'}
                 </button>

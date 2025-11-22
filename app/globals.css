@@ -26,7 +26,7 @@ body {
 
 @layer utilities {
   .text-balance {
-    text-wrap: balance;
+    /* text-wrap: balance; - Removed for better browser compatibility */
   }
   
   @media (prefers-reduced-motion: reduce) {
@@ -42,6 +42,16 @@ body {
   .touch-target {
     min-width: 44px;
     min-height: 44px;
+  }
+
+  /* Visualizer specific utilities */
+  .array-bar {
+    flex: 1 1 0;
+    max-width: 80px;
+  }
+
+  .visualizer-container {
+    height: 400px;
   }
 }
 

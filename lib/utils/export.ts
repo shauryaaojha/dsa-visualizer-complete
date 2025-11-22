@@ -1,21 +1,25 @@
-export function exportCanvasAsImage(elementId: string, filename: string = 'visualization.png') {
+import html2canvas from 'html2canvas';
+
+export async function exportCanvasAsImage(elementId: string, filename: string = 'visualization.png'): Promise<void> {
     const element = document.getElementById(elementId);
     if (!element) {
-        console.error('Element not found');
+        console.error('Element not found:', elementId);
         return;
     }
 
-    // Use html2canvas if available, otherwise use fallback
-    if (typeof window !== 'undefined' && (window as any).html2canvas) {
-        (window as any).html2canvas(element).then((canvas: HTMLCanvasElement) => {
-            const link = document.createElement('a');
-            link.download = filename;
-            link.href = canvas.toDataURL('image/png');
-            link.click();
+    try {
+        const canvas = await html2canvas(element, {
+            backgroundColor: null,
+            scale: 2, // Higher quality
+            logging: false,
         });
-    } else {
-        // Fallback: Create a simple screenshot using canvas API
-        console.warn('html2canvas not available, using fallback method');
+        
+        const link = document.createElement('a');
+        link.download = filename;
+        link.href = canvas.toDataURL('image/png');
+        link.click();
+    } catch (error) {
+        console.error('Failed to export image:', error);
     }
 }
 
