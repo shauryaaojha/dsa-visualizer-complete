@@ -184,10 +184,10 @@ function AlgorithmMenuTrigger({ currentCategory, currentAlgorithm, className = '
                 <span>{label}</span>
             </button>
             {open && (
-                <div className="fixed inset-0 z-50 bg-black/70 flex flex-col md:bg-transparent md:block">
+                <div className="fixed inset-0 z-50 bg-black/70 flex flex-col">
                     <div className="absolute inset-0" onClick={() => setOpen(false)} aria-hidden="true" />
-                    <div className="relative z-10 flex-1 w-full md:h-auto md:flex-none md:block">
-                        <div className="flex h-[calc(100vh-4rem)] md:h-full w-full flex-col bg-[#050710] border-t border-white/10 md:border md:w-[720px] md:rounded-3xl md:absolute md:top-16 md:left-1/2 md:-translate-x-1/2 p-5 overflow-y-auto overscroll-contain touch-pan-y">
+                    <div className="relative z-10 flex-1 w-full max-h-[calc(100vh-4rem)] px-4">
+                        <div className="flex h-full w-full flex-col bg-[#050710] border border-white/10 rounded-3xl p-5 overflow-y-auto overscroll-contain touch-pan-y">
                         <div className="flex items-center justify-between mb-3">
                             <div>
                                 <p className="text-lg font-semibold text-white">Browse algorithms</p>
