@@ -191,7 +191,8 @@ export function singlyLinkedListSteps(operation: string, value?: number, positio
             });
 
             if (currentNode.value === value) {
-                highlightedNodes.find(n => n.id === current)!.highlight = 'found';
+                const foundNode = highlightedNodes.find(n => n.id === current);
+                if (foundNode) (foundNode as any).highlight = 'found';
                 steps.push({
                     linkedList: {
                         nodes: JSON.parse(JSON.stringify(highlightedNodes)),

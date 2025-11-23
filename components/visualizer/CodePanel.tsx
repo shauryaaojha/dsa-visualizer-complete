@@ -7,10 +7,9 @@ interface CodePanelProps {
 
 export function CodePanel({ code, currentLine }: CodePanelProps) {
     return (
-        <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Code</h2>
-            <div className="bg-gray-900 rounded-lg p-4 overflow-x-auto">
-                <pre className="text-sm font-mono">
+        <div>
+            <div className="bg-[#050b18] rounded-2xl p-4 overflow-x-auto border border-white/10 shadow-inner shadow-[#000]/40">
+                <pre className="text-sm font-mono leading-relaxed text-white/80">
                     {code.map((line, index) => {
                         const lineNumber = index + 1;
                         const isActive = currentLine === lineNumber;
@@ -18,13 +17,16 @@ export function CodePanel({ code, currentLine }: CodePanelProps) {
                         return (
                             <div
                                 key={index}
-                                className={`py-1 px-2 -mx-2 rounded transition-colors ${isActive ? 'bg-yellow-500/30 border-l-4 border-yellow-400' : ''
-                                    }`}
+                                className={`py-1.5 px-3 -mx-2 rounded-xl transition-all duration-200 ${
+                                    isActive 
+                                        ? 'bg-gradient-to-r from-[#7c3aed]/30 to-[#c026d3]/30 border-l-4 border-[#c084fc] shadow-lg shadow-[#7c3aed]/20' 
+                                        : 'hover:bg-white/5'
+                                }`}
                             >
-                                <span className="text-gray-500 select-none mr-4 inline-block w-6 text-right">
+                                <span className="text-white/30 select-none mr-4 inline-block w-8 text-right font-bold text-xs">
                                     {lineNumber}
                                 </span>
-                                <span className={isActive ? 'text-yellow-100' : 'text-gray-300'}>
+                                <span className={isActive ? 'text-white font-semibold' : 'text-white/60'}>
                                     {line}
                                 </span>
                             </div>
@@ -32,6 +34,6 @@ export function CodePanel({ code, currentLine }: CodePanelProps) {
                     })}
                 </pre>
             </div>
-        </Card>
+        </div>
     );
 }

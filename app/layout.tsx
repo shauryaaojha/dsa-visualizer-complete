@@ -1,8 +1,12 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 
-const inter = Inter({ subsets: ["latin"] });
+const jetbrainsMono = JetBrains_Mono({ 
+    subsets: ["latin"],
+    weight: ["400", "500", "600", "700"],
+    variable: "--font-jetbrains-mono",
+});
 
 export const metadata: Metadata = {
     title: "DSA Visualizer - Interactive Algorithm Learning",
@@ -15,8 +19,10 @@ export default function RootLayout({
     children: React.ReactNode;
 }>) {
     return (
-        <html lang="en">
-            <body className={inter.className}>{children}</body>
+        <html lang="en" className={jetbrainsMono.variable}>
+            <body className="antialiased font-sans text-base text-slate-900 dark:text-slate-100">
+                {children}
+            </body>
         </html>
     );
 }

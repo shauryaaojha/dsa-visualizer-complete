@@ -5,7 +5,9 @@ const config: Config = {
         "./pages/**/*.{js,ts,jsx,tsx,mdx}",
         "./components/**/*.{js,ts,jsx,tsx,mdx}",
         "./app/**/*.{js,ts,jsx,tsx,mdx}",
+        "./lib/**/*.{js,ts,jsx,tsx,mdx}",
     ],
+    darkMode: 'class',
     theme: {
         extend: {
             colors: {
@@ -20,6 +22,20 @@ const config: Config = {
                     700: '#0369a1',
                     800: '#075985',
                     900: '#0c4a6e',
+                },
+            },
+            animation: {
+                'fade-in': 'fadeIn 0.2s ease-in',
+                'slide-in': 'slideIn 0.3s ease-out',
+            },
+            keyframes: {
+                fadeIn: {
+                    '0%': { opacity: '0' },
+                    '100%': { opacity: '1' },
+                },
+                slideIn: {
+                    '0%': { transform: 'translateX(-100%)' },
+                    '100%': { transform: 'translateX(0)' },
                 },
             },
         },

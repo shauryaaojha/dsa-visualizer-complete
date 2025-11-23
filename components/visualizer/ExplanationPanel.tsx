@@ -1,16 +1,11 @@
-import { Card } from '@/components/ui/Card';
-
 interface ExplanationPanelProps {
     message: string;
 }
 
 export function ExplanationPanel({ message }: ExplanationPanelProps) {
     return (
-        <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">Explanation</h2>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p className="text-gray-800 leading-relaxed">{message}</p>
-            </div>
-        </Card>
+        <div className="bg-gradient-to-r from-[#101a34] via-[#1f0f3c] to-[#05050d] border border-white/10 rounded-3xl p-5 shadow-inner">
+            <p className="text-white/80 leading-relaxed text-sm font-medium">{message}</p>
+        </div>
     );
 }

@@ -1,7 +1,5 @@
-import { Card } from '@/components/ui/Card';
-
 interface StateInspectorProps {
-    variables: Record<string, number>;
+    variables: Record<string, number | string>;
     comparisons: number;
     swaps: number;
     currentStep: number;
@@ -16,50 +14,46 @@ export function StateInspector({
     totalSteps,
 }: StateInspectorProps) {
     return (
-        <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 mb-4">State Inspector</h2>
-
-            <div className="space-y-4">
-                {/* Variables */}
-                <div>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-2">Variables</h3>
-                    <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                        {Object.keys(variables).length === 0 ? (
-                            <p className="text-sm text-gray-500">No variables to display</p>
-                        ) : (
-                            Object.entries(variables).map(([key, value]) => (
-                                <div key={key} className="flex justify-between items-center">
-                                    <span className="font-mono text-sm text-gray-700">{key}:</span>
-                                    <span className="font-mono text-sm font-semibold text-primary-600">
-                                        {value}
-                                    </span>
-                                </div>
-                            ))
-                        )}
-                    </div>
-                </div>
-
-                {/* Metrics */}
-                <div>
-                    <h3 className="text-sm font-semibold text-gray-700 mb-2">Metrics</h3>
-                    <div className="bg-gray-50 rounded-lg p-3 space-y-2">
-                        <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-700">Comparisons:</span>
-                            <span className="text-sm font-semibold text-gray-900">{comparisons}</span>
-                        </div>
-                        {swaps > 0 && (
-                            <div className="flex justify-between items-center">
-                                <span className="text-sm text-gray-700">Swaps:</span>
-                                <span className="text-sm font-semibold text-gray-900">{swaps}</span>
+        <div className="space-y-3">
+            {/* Variables */}
+            <div>
+                <h3 className="text-[11px] font-semibold text-white/50 mb-2 uppercase tracking-[0.3em]">Variables</h3>
+                <div className="bg-[#050b18] text-white rounded-2xl p-4 space-y-2 border border-white/10 shadow-inner">
+                    {Object.keys(variables).length === 0 ? (
+                        <p className="text-sm text-white/50">No variables to display</p>
+                    ) : (
+                        Object.entries(variables).map(([key, value]) => (
+                            <div key={key} className="flex justify-between items-center">
+                                <span className="font-mono text-sm text-[#a5b4fc]">{key}:</span>
+                                <span className="font-mono text-sm font-bold text-white">
+                                    {value}
+                                </span>
                             </div>
-                        )}
+                        ))
+                    )}
+                </div>
+            </div>
+
+            {/* Metrics */}
+            <div>
+                <h3 className="text-[11px] font-semibold text-white/50 mb-2 uppercase tracking-[0.3em]">Metrics</h3>
+                <div className="bg-[#050b18] text-white rounded-2xl p-4 space-y-2 border border-white/10 shadow-inner">
+                    <div className="flex justify-between items-center">
+                        <span className="text-sm text-white/60">Comparisons:</span>
+                        <span className="text-sm font-bold text-[#60a5fa]">{comparisons}</span>
+                    </div>
+                    {swaps > 0 && (
                         <div className="flex justify-between items-center">
-                            <span className="text-sm text-gray-700">Total Steps:</span>
-                            <span className="text-sm font-semibold text-gray-900">{totalSteps}</span>
+                            <span className="text-sm text-white/60">Swaps:</span>
+                            <span className="text-sm font-bold text-[#f472b6]">{swaps}</span>
                         </div>
+                    )}
+                    <div className="flex justify-between items-center">
+                        <span className="text-sm text-white/60">Total Steps:</span>
+                        <span className="text-sm font-bold text-[#c084fc]">{totalSteps}</span>
                     </div>
                 </div>
             </div>
-        </Card>
+        </div>
     );
 }
