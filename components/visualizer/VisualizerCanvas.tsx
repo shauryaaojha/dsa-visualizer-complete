@@ -1,34 +1,75 @@
-import { Card } from '@/components/ui/Card';
 import { StepState, HighlightType, VisualizerKind } from '@/lib/algorithms/types';
+
+interface VisualSettings {
+    showGrid: boolean;
+    showEdgeWeights: boolean;
+    showNodeLabels: boolean;
+}
 
 interface VisualizerCanvasProps {
     step?: StepState;
     algorithmType: 'sorting' | 'searching' | 'data-structure' | 'graph' | 'application';
     visualizerKind?: VisualizerKind;
+    visualSettings?: VisualSettings;
 }
 
-export function VisualizerCanvas({ step, algorithmType, visualizerKind = 'array' }: VisualizerCanvasProps) {
+const DEFAULT_SETTINGS: VisualSettings = {
+    showGrid: true,
+    showEdgeWeights: true,
+    showNodeLabels: true,
+};
+
+export function VisualizerCanvas({
+    step,
+    algorithmType,
+    visualizerKind = 'array',
+    visualSettings = DEFAULT_SETTINGS,
+}: VisualizerCanvasProps) {
+    const mergedSettings = { ...DEFAULT_SETTINGS, ...visualSettings };
+
     if (!step) {
         return (
-            <Card className="p-6 h-96 flex items-center justify-center">
-                <p className="text-gray-500 dark:text-gray-400">Enter input and click Run to start visualization</p>
-            </Card>
+            <div
+                id="visualizer-canvas"
+                className="relative h-[320px] sm:h-[360px] lg:h-[420px] border border-slate-200 dark:border-slate-700/60 rounded-2xl bg-white/85 dark:bg-slate-950/70 flex items-center justify-center text-center overflow-hidden"
+            >
+                {mergedSettings.showGrid && <CanvasGrid />}
+                <div className="relative z-10 space-y-2">
+                    <p className="text-slate-600 dark:text-gray-300 font-semibold">Enter input and press <span className="text-slate-900 dark:text-white">Run</span> to start.</p>
+                    <p className="text-sm text-gray-500 dark:text-gray-400 max-w-sm mx-auto">Use the settings button above to tweak the visualization before running.</p>
+                </div>
+            </div>
         );
     }
 
     return (
-        <Card className="p-6">
-            <h2 className="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-4">Visualization</h2>
-            <div className="min-h-[300px]" id="visualizer-canvas">{(visualizerKind === 'array' || step.array) && <ArrayVisualizer step={step} />}
+        <div
+            id="visualizer-canvas"
+            className="relative w-full min-h-[320px] sm:min-h-[360px] lg:min-h-[420px] rounded-2xl border border-slate-200 dark:border-slate-700/60 bg-white/85 dark:bg-slate-950/70 overflow-hidden"
+        >
+            {mergedSettings.showGrid && <CanvasGrid />}
+            <div className="relative z-10 min-h-[360px]">
+                {(visualizerKind === 'array' || step.array) && <ArrayVisualizer step={step} />}
                 {visualizerKind === 'linked-list' && step.linkedList && <LinkedListVisualizer step={step} />}
                 {visualizerKind === 'stack' && step.stack && <StackVisualizer step={step} />}
                 {visualizerKind === 'queue' && step.queue && <QueueVisualizer step={step} />}
                 {visualizerKind === 'tree' && step.tree && <TreeVisualizer step={step} />}
                 {visualizerKind === 'heap' && step.heap && <HeapVisualizer step={step} />}
                 {visualizerKind === 'hash-table' && step.hashTable && <HashTableVisualizer step={step} />}
-                {visualizerKind === 'graph' && step.graph && <GraphVisualizer step={step} />}
+                {visualizerKind === 'graph' && step.graph && (
+                    <GraphVisualizer
+                        step={step}
+                        settings={mergedSettings}
+                    />
+                )}
             </div>
-        </Card>
+        </div>
+    );
+}
+
+function CanvasGrid() {
+    return (
+        <div className="absolute inset-0 opacity-25 visualizer-grid" />
     );
 }
 
@@ -320,64 +361,145 @@ function TreeVisualizer({ step }: { step: StepState }) {
     );
 }
 
-function GraphVisualizer({ step }: { step: StepState }) {
+interface GraphVisualizerProps {
+    step: StepState;
+    settings: VisualSettings;
+}
+
+function GraphVisualizer({ step, settings }: GraphVisualizerProps) {
     if (!step.graph) return null;
     const { nodes, edges } = step.graph;
 
-    const getHighlightColor = (highlight?: HighlightType): string => {
-        if (!highlight) return 'bg-blue-100 border-blue-400';
-        const colors: Record<HighlightType, string> = {
-            visiting: 'bg-yellow-300 border-yellow-600',
-            visited: 'bg-green-300 border-green-500',
-            current: 'bg-orange-300 border-orange-600',
-            compare: 'bg-purple-200 border-purple-400',
-            found: 'bg-green-400 border-green-600',
-            path: 'bg-purple-400 border-purple-600',
-            active: 'bg-red-400 border-red-600',
-            swap: 'bg-red-300 border-red-500',
-            pivot: 'bg-pink-300 border-pink-500',
-            selected: 'bg-indigo-300 border-indigo-500',
-            sorted: 'bg-teal-300 border-teal-500',
-            low: 'bg-blue-200 border-blue-400',
-            high: 'bg-blue-200 border-blue-400',
-            mid: 'bg-orange-200 border-orange-400',
+    const CANVAS_WIDTH = 800;
+    const CANVAS_HEIGHT = 500;
+    const PADDING = 48;
+
+    const minX = Math.min(...nodes.map((node) => node.x));
+    const maxX = Math.max(...nodes.map((node) => node.x));
+    const minY = Math.min(...nodes.map((node) => node.y));
+    const maxY = Math.max(...nodes.map((node) => node.y));
+
+    const spanX = maxX - minX || 1;
+    const spanY = maxY - minY || 1;
+
+    const normalizedNodes = nodes.map((node) => ({
+        ...node,
+        x: PADDING + ((node.x - minX) / spanX) * (CANVAS_WIDTH - PADDING * 2),
+        y: PADDING + ((node.y - minY) / spanY) * (CANVAS_HEIGHT - PADDING * 2),
+    }));
+
+    const nodeMap = new Map(normalizedNodes.map((node) => [node.id, node]));
+
+    const getNodeColors = (highlight?: HighlightType) => {
+        const palette: Record<string, { fill: string; stroke: string }> = {
+            visiting: { fill: 'rgba(250, 204, 21, 0.9)', stroke: 'rgba(250, 204, 21, 1)' },
+            visited: { fill: 'rgba(34, 197, 94, 0.9)', stroke: 'rgba(134, 239, 172, 1)' },
+            current: { fill: 'rgba(249, 115, 22, 0.9)', stroke: 'rgba(251, 146, 60, 1)' },
+            compare: { fill: 'rgba(192, 132, 252, 0.9)', stroke: 'rgba(233, 213, 255, 1)' },
+            found: { fill: 'rgba(34, 197, 94, 0.9)', stroke: 'rgba(187, 247, 208, 1)' },
+            path: { fill: 'rgba(168, 85, 247, 0.95)', stroke: 'rgba(233, 213, 255, 1)' },
+            active: { fill: 'rgba(248, 113, 113, 0.95)', stroke: 'rgba(252, 165, 165, 1)' },
+            swap: { fill: 'rgba(248, 113, 113, 0.85)', stroke: 'rgba(248, 113, 113, 1)' },
+            pivot: { fill: 'rgba(236, 72, 153, 0.9)', stroke: 'rgba(244, 114, 182, 1)' },
+            selected: { fill: 'rgba(129, 140, 248, 0.9)', stroke: 'rgba(165, 180, 252, 1)' },
+            sorted: { fill: 'rgba(45, 212, 191, 0.9)', stroke: 'rgba(94, 234, 212, 1)' },
+            low: { fill: 'rgba(59, 130, 246, 0.85)', stroke: 'rgba(147, 197, 253, 1)' },
+            high: { fill: 'rgba(59, 130, 246, 0.85)', stroke: 'rgba(147, 197, 253, 1)' },
+            mid: { fill: 'rgba(251, 146, 60, 0.85)', stroke: 'rgba(253, 186, 116, 1)' },
         };
-        return colors[highlight] || 'bg-blue-100 border-blue-400';
+
+        return palette[highlight || ''] || { fill: 'rgba(59, 130, 246, 0.85)', stroke: 'rgba(147, 197, 253, 1)' };
     };
 
     return (
-        <div className="relative p-6 visualizer-container">
-            <svg className="absolute inset-0" width="100%" height="100%">
+        <div className="relative w-full h-[360px] sm:h-[420px] lg:h-[500px]">
+            <svg
+                className="absolute inset-0"
+                width="100%"
+                height="100%"
+                viewBox={`0 0 ${CANVAS_WIDTH} ${CANVAS_HEIGHT}`}
+                preserveAspectRatio="xMidYMid meet"
+            >
+                <defs>
+                    <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto" markerUnits="strokeWidth">
+                        <path d="M0,0 L0,6 L6,3 z" fill="rgba(148,163,184,0.8)" />
+                    </marker>
+                    <filter id="nodeGlow" x="-20%" y="-20%" width="140%" height="140%">
+                        <feGaussianBlur stdDeviation="4" result="coloredBlur" />
+                        <feMerge>
+                            <feMergeNode in="coloredBlur" />
+                            <feMergeNode in="SourceGraphic" />
+                        </feMerge>
+                    </filter>
+                </defs>
+
                 {edges.map((edge, idx) => {
-                    const fromNode = nodes.find(n => n.id === edge.from);
-                    const toNode = nodes.find(n => n.id === edge.to);
+                    const fromNode = nodeMap.get(edge.from);
+                    const toNode = nodeMap.get(edge.to);
                     if (!fromNode || !toNode) return null;
 
+                    const midX = (fromNode.x + toNode.x) / 2;
+                    const midY = (fromNode.y + toNode.y) / 2;
+
                     return (
-                        <line
-                            key={idx}
-                            x1={fromNode.x}
-                            y1={fromNode.y}
-                            x2={toNode.x}
-                            y2={toNode.y}
-                            stroke="#94a3b8"
-                            strokeWidth="2"
-                        />
+                        <g key={`${edge.from}-${edge.to}-${idx}`}> 
+                            <line
+                                x1={fromNode.x}
+                                y1={fromNode.y}
+                                x2={toNode.x}
+                                y2={toNode.y}
+                                stroke="rgba(148,163,184,0.5)"
+                                strokeWidth={edge.highlight === 'path' ? 3 : 2}
+                                markerEnd="url(#arrow)"
+                            />
+                            {settings.showEdgeWeights && edge.weight !== undefined && (
+                                <text
+                                    x={midX}
+                                    y={midY - 6}
+                                    textAnchor="middle"
+                                    className="fill-purple-200 text-xs font-semibold"
+                                >
+                                    {edge.weight}
+                                </text>
+                            )}
+                        </g>
+                    );
+                })}
+
+                {normalizedNodes.map((node) => {
+                    const colors = getNodeColors(node.highlight);
+
+                    return (
+                        <g key={node.id} transform={`translate(${node.x}, ${node.y})`}>
+                            <circle
+                                r={28}
+                                stroke={colors.stroke}
+                                fill={colors.fill}
+                                strokeWidth={2}
+                                filter={node.highlight ? 'url(#nodeGlow)' : undefined}
+                            />
+                            {settings.showNodeLabels && (
+                                <text
+                                    textAnchor="middle"
+                                    dy="0.35em"
+                                    className="fill-white font-semibold text-base"
+                                >
+                                    {node.label}
+                                </text>
+                            )}
+                            {node.distance !== undefined && node.distance !== Infinity && (
+                                <text
+                                    textAnchor="middle"
+                                    dy="2.2em"
+                                    className="fill-slate-300 text-xs"
+                                >
+                                    d:{node.distance}
+                                </text>
+                            )}
+                        </g>
                     );
                 })}
             </svg>
-            {nodes.map((node) => (
-                <div
-                    key={node.id}
-                    className={`absolute px-4 py-3 rounded-full border-2 ${getHighlightColor(node.highlight)} transition-all shadow-lg transform -translate-x-1/2 -translate-y-1/2`}
-                    style={{ left: `${node.x}px`, top: `${node.y}px` }}
-                >
-                    <div className="text-sm font-bold">{node.label}</div>
-                    {node.distance !== undefined && node.distance !== Infinity && (
-                        <div className="text-xs text-gray-600">d:{node.distance}</div>
-                    )}
-                </div>
-            ))}
         </div>
     );
 }
