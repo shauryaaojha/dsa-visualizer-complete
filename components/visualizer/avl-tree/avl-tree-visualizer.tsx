@@ -3,7 +3,7 @@
 import { AVLTreeControls } from "@/components/visualizer/avl-tree/avl-tree-controls"
 import { AVLTreeDisplay } from "@/components/visualizer/avl-tree/avl-tree-display"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 import { useAVLTree } from "@/hooks/use-avl-tree"
 import { AVLTreeAnalysis } from "./avl-tree-analysis"
 

@@ -1,8 +1,8 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 import { useMessageQueue } from "@/hooks/use-message-queue"
 import { MessageQueueDisplay } from "@/components/visualizer/queue-applications/message-queue-display"
 import { ProducerControls } from "@/components/visualizer/queue-applications/producer-controls"

@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { useState } from "react"
 
 interface AVLTreeControlsProps {
@@ -59,32 +59,32 @@ export function AVLTreeControls({
         </CardHeader>
         <CardContent className="space-y-4">
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
-            <Button 
-              onClick={() => onTraversal("inorder")} 
+            <Button
+              onClick={() => onTraversal("inorder")}
               disabled={isAnimating}
               variant="secondary"
               className="w-full"
             >
               In-Order
             </Button>
-            <Button 
-              onClick={() => onTraversal("preorder")} 
+            <Button
+              onClick={() => onTraversal("preorder")}
               disabled={isAnimating}
               variant="secondary"
               className="w-full"
             >
               Pre-Order
             </Button>
-            <Button 
-              onClick={() => onTraversal("postorder")} 
+            <Button
+              onClick={() => onTraversal("postorder")}
               disabled={isAnimating}
               variant="secondary"
               className="w-full"
             >
               Post-Order
             </Button>
-            <Button 
-              variant="destructive" 
+            <Button
+              variant="destructive"
               onClick={onClear}
               className="w-full"
             >
@@ -102,7 +102,7 @@ export function AVLTreeControls({
           <CardContent>
             <div className="flex flex-wrap gap-2">
               {traversalHistory.map((value, index) => (
-                <div 
+                <div
                   key={index}
                   className="bg-primary/10 text-primary px-3 py-1.5 rounded-md text-sm font-medium
                             border border-primary/20 shadow-sm"
@@ -123,7 +123,7 @@ export function AVLTreeControls({
           <CardContent>
             <div className="flex flex-col gap-2">
               {rotationHistory.map((rotation, index) => (
-                <div 
+                <div
                   key={index}
                   className="bg-orange-500/10 text-orange-500 px-3 py-1.5 rounded-md text-sm font-medium
                             border border-orange-500/20 shadow-sm"

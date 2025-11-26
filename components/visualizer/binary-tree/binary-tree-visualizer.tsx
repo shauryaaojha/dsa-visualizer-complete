@@ -4,7 +4,7 @@ import { BinaryTreeControls } from "./binary-tree-controls"
 import { BinaryTreeDisplay } from "./binary-tree-display"
 import { BinaryTreeAnalysis } from "./binary-tree-analysis"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 import { useBinaryTree } from "@/hooks/use-binary-tree"
 
 interface BinaryTreeVisualizerProps {

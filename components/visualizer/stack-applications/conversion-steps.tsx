@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { ConversionStep, Token } from "./types"
 import { motion, AnimatePresence } from "framer-motion"
 

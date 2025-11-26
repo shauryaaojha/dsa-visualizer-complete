@@ -3,7 +3,7 @@
 import { QueueNode } from "./types"
 import { motion, AnimatePresence } from "framer-motion"
 import { ArrowRight } from "lucide-react"
-import { Card } from "@/components/ui/card"
+import { Card } from "@/components/ui/Card"
 
 interface QueueDisplayProps {
   queue: QueueNode[]

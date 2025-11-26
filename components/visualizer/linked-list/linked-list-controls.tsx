@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { useState } from "react"
 import { Switch } from "@/components/ui/switch"
 import { Label } from "@/components/ui/label"
@@ -68,7 +68,7 @@ export function LinkedListControls({
               disabled={isAnimating}
               className="flex-1"
             />
-            <Button 
+            <Button
               onClick={handleInsert}
               disabled={isAnimating || !value.trim()}
             >
@@ -79,14 +79,14 @@ export function LinkedListControls({
 
         {/* Delete Controls */}
         <div className="grid grid-cols-2 gap-2">
-          <Button 
+          <Button
             onClick={onDeleteFront}
             disabled={isAnimating || isEmpty}
             variant="secondary"
           >
             Delete Front
           </Button>
-          <Button 
+          <Button
             onClick={onDeleteBack}
             disabled={isAnimating || isEmpty}
             variant="secondary"
@@ -96,7 +96,7 @@ export function LinkedListControls({
         </div>
 
         {/* Reverse Control */}
-        <Button 
+        <Button
           onClick={onReverse}
           disabled={isAnimating || isEmpty}
           className="w-full"

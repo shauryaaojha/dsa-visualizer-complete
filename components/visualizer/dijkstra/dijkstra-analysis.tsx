@@ -1,7 +1,7 @@
 "use client"
 
 import { Graph } from "@/hooks/use-dijkstra"
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/Card"
 
 interface DijkstraAnalysisProps {
   graph: Graph

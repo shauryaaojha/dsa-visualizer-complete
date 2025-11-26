@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { useState } from "react"
 import { Producer } from "./types"
 

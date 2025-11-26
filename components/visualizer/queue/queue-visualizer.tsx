@@ -4,7 +4,7 @@ import { QueueControls } from "@/components/visualizer/queue/queue-controls"
 import { QueueDisplay } from "@/components/visualizer/queue/queue-display"
 import { QueueOperations } from "@/components/visualizer/queue/queue-operations"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 import { useQueue } from "@/hooks/use-queue"
 
 interface QueueVisualizerProps {

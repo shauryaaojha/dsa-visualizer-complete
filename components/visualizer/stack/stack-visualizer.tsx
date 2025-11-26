@@ -4,7 +4,7 @@ import { StackControls } from "@/components/visualizer/stack/stack-controls"
 import { StackDisplay } from "@/components/visualizer/stack/stack-display"
 import { StackOperations } from "@/components/visualizer/stack/stack-operations"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 import { useStack } from "@/hooks/use-stack"
 
 interface StackVisualizerProps {

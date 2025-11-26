@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { useState } from "react"
 
 interface StackControlsProps {
@@ -48,7 +48,7 @@ export function StackControls({
             disabled={isAnimating || isFull}
             className="flex-1"
           />
-          <Button 
+          <Button
             onClick={handlePush}
             disabled={isAnimating || isFull}
           >
@@ -57,14 +57,14 @@ export function StackControls({
         </div>
 
         <div className="grid grid-cols-2 gap-2">
-          <Button 
+          <Button
             onClick={onPop}
             disabled={isAnimating || isEmpty}
             variant="secondary"
           >
             Pop
           </Button>
-          <Button 
+          <Button
             onClick={onClear}
             disabled={isAnimating || isEmpty}
             variant="destructive"

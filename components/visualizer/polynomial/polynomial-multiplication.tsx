@@ -1,7 +1,7 @@
 "use client"
 
-import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
+import { Card } from "@/components/ui/Card"
+import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/input"
 import { useState, useEffect } from "react"
 import { usePolynomial, PolynomialNode, Term } from "@/hooks/use-polynomial"
@@ -19,7 +19,7 @@ function adaptPolynomialToLinkedList(
   nodes: Map<string, PolynomialNode>
 ): LinkedList {
   const adaptedNodes = new Map<string, ExtendedListNode>()
-  
+
   nodes.forEach((node, id) => {
     adaptedNodes.set(id, {
       id,
@@ -76,7 +76,7 @@ export function PolynomialMultiplication() {
       const coef = term.coefficient === 1 ? '' : term.coefficient === -1 ? '-' : term.coefficient.toString()
       const exp = term.exponent === 1 ? 'x' : `x<sup>${term.exponent}</sup>`
       return (
-        <span dangerouslySetInnerHTML={{ 
+        <span dangerouslySetInnerHTML={{
           __html: `${coef}${exp}`
         }} />
       )
@@ -141,9 +141,8 @@ export function PolynomialMultiplication() {
             {steps.map((step, index) => (
               <div
                 key={index}
-                className={`text-sm p-2 rounded ${
-                  index === currentStep ? 'bg-muted' : ''
-                }`}
+                className={`text-sm p-2 rounded ${index === currentStep ? 'bg-muted' : ''
+                  }`}
               >
                 {step.message}
               </div>
@@ -196,7 +195,7 @@ export function PolynomialMultiplication() {
         )}
 
         <div className="flex gap-2">
-          <Button 
+          <Button
             onClick={multiply}
             disabled={!poly1.head || !poly2.head || steps.length > 0}
           >

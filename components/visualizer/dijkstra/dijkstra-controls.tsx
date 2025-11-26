@@ -1,8 +1,8 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/Card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Separator } from "@/components/ui/separator"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -120,7 +120,7 @@ export function DijkstraControls({
                 </CardHeader>
                 <CardContent className="space-y-4">
                   <div>
-                    <Button 
+                    <Button
                       onClick={() => onAddNode(Math.random() * 500, Math.random() * 300)}
                       className="w-full"
                     >
@@ -245,8 +245,8 @@ export function DijkstraControls({
                       </div>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {path.length === 1 
-                        ? "Click 'Find Shortest Path' to start" 
+                      {path.length === 1
+                        ? "Click 'Find Shortest Path' to start"
                         : `Found path with ${path.length - 1} edges`
                       }
                     </div>
@@ -263,8 +263,8 @@ export function DijkstraControls({
 
         <Separator className="my-4" />
 
-        <Button 
-          variant="destructive" 
+        <Button
+          variant="destructive"
           onClick={onClear}
           className="w-full"
         >

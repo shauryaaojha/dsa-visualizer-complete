@@ -4,7 +4,7 @@ import { HeapControls } from "@/components/visualizer/heap/heap-controls"
 import { HeapDisplay } from "@/components/visualizer/heap/heap-display"
 import { HeapArray } from "@/components/visualizer/heap/heap-array"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 import { useHeap } from "@/hooks/use-heap"
 
 interface HeapVisualizerProps {

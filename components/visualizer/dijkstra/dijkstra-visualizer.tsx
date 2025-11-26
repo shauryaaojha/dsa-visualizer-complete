@@ -4,7 +4,7 @@ import { DijkstraControls } from "@/components/visualizer/dijkstra/dijkstra-cont
 import { DijkstraDisplay } from "@/components/visualizer/dijkstra/dijkstra-display"
 import { DijkstraAnalysis } from "@/components/visualizer/dijkstra/dijkstra-analysis"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 import { useDijkstra } from "@/hooks/use-dijkstra"
 
 interface DijkstraVisualizerProps {

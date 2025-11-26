@@ -1,6 +1,6 @@
 "use client"
 
-import { Card } from "@/components/ui/card"
+import { Card } from "@/components/ui/Card"
 import { LinkedList } from "./types"
 import { motion, AnimatePresence } from "framer-motion"
 import { ArrowRight, ArrowLeft } from "lucide-react"

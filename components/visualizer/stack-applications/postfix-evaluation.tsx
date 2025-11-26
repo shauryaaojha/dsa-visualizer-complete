@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { motion, AnimatePresence } from "framer-motion"
 import { Token } from "./types"
 import { usePostfixEvaluation } from "@/hooks/use-postfix-evaluation"

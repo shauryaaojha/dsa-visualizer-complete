@@ -1,4 +1,4 @@
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { ListOperation } from "./types"
 import { ArrowRight, ArrowLeft, Repeat } from "lucide-react"
 

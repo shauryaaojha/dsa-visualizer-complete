@@ -1,6 +1,6 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { Message, Consumer } from "./types"
 import { motion, AnimatePresence } from "framer-motion"
 import { formatDistanceToNow } from "date-fns"

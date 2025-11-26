@@ -7,7 +7,7 @@ import { HuffmanCodes } from "./huffman-codes"
 import { CompressionDisplay } from "./compression-display"
 import { FrequencyList } from "./frequency-list"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 import { useHuffman } from "@/hooks/use-huffman"
 
 interface HuffmanVisualizerProps {
@@ -45,7 +45,7 @@ export function HuffmanVisualizer({ content }: HuffmanVisualizerProps) {
           <TabsTrigger value="analysis">Analysis</TabsTrigger>
           <TabsTrigger value="explanation">Explanation</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="visualization" className="space-y-6">
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="xl:col-span-1 space-y-6">
@@ -59,7 +59,7 @@ export function HuffmanVisualizer({ content }: HuffmanVisualizerProps) {
                 totalSteps={steps.length}
               />
               <HuffmanCodes codes={codes} />
-              <CompressionDisplay 
+              <CompressionDisplay
                 originalText={originalText}
                 codes={codes}
               />
@@ -70,7 +70,7 @@ export function HuffmanVisualizer({ content }: HuffmanVisualizerProps) {
                 highlightedNodes={highlightedNodes}
                 message={steps[currentStep]?.message || ''}
               />
-              <FrequencyList 
+              <FrequencyList
                 frequencies={frequencies}
                 totalChars={originalText.length}
               />
@@ -81,7 +81,7 @@ export function HuffmanVisualizer({ content }: HuffmanVisualizerProps) {
         <TabsContent value="analysis">
           <HuffmanAnalysis tree={tree} codes={codes} />
         </TabsContent>
-        
+
         <TabsContent value="explanation" className="prose dark:prose-invert max-w-none">
           <MarkdownContent content={content} />
         </TabsContent>

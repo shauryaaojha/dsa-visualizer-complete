@@ -1,5 +1,6 @@
 "use client"
 
+import { usePathname } from "next/navigation"
 import {
   Folder,
   Forward,
@@ -42,16 +43,22 @@ export function NavProjects({
   }[]
 }) {
   const { isMobile } = useSidebar()
+  const pathname = usePathname()
 
   return (
     <SidebarGroup className="group-data-[collapsible=icon]:hidden">
-      <SidebarGroupLabel>{title}</SidebarGroupLabel>
+      <SidebarGroupLabel className="text-xs font-bold text-primary/80 uppercase tracking-wider">{title}</SidebarGroupLabel>
       <SidebarMenu>
-        {projects.map((item) => (
+        {projects.map((item) => {
+          const isActive = pathname === item.url
+          return (
           <SidebarMenuItem key={item.name}>
-            <SidebarMenuButton asChild>
+            <SidebarMenuButton 
+              asChild
+              className={isActive ? "bg-primary/20 border-l-4 border-primary text-primary font-semibold" : "hover:bg-primary/10"}
+            >
               <a href={item.url}>
-                <item.icon />
+                <item.icon className={isActive ? "text-primary" : ""} />
                 <span>{item.name}</span>
               </a>
             </SidebarMenuButton>
@@ -83,7 +90,8 @@ export function NavProjects({
               </DropdownMenuContent>
             </DropdownMenu>
           </SidebarMenuItem>
-        ))}
+          )
+        })}
       </SidebarMenu>
     </SidebarGroup>
   )

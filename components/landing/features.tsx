@@ -1,7 +1,7 @@
 "use client";
 import { Badge } from "@/components/ui/badge";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
+import { Button } from "@/components/ui/Button";
 import { MoveRight } from "lucide-react";
 import { useState } from "react";
 import Link from "next/link";
@@ -102,22 +102,25 @@ export const Features = () => {
               </p>
             </div>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
             {features.map((feature, index) => (
-              <div 
-                key={index} 
-                className="flex flex-col gap-2 cursor-pointer group"
+              <div
+                key={index}
+                className="flex flex-col gap-3 cursor-pointer group"
                 onClick={() => setSelectedFeature(feature)}
               >
-                <div className="relative aspect-video rounded-md overflow-hidden mb-2 ring-1 ring-primary/10 group-hover:ring-primary/30 transition-all">
-                  <img
-                    src={feature.image}
-                    alt={feature.title}
-                    className="object-cover w-full h-full transition-transform group-hover:scale-105"
-                  />
+                <div className="relative aspect-video rounded-2xl overflow-hidden mb-2 liquid-glass group-hover:scale-[1.03] transition-all duration-300 border-2 border-primary/20">
+                  <div className="absolute inset-0 bg-gradient-to-br from-primary/15 via-accent/15 to-transparent"></div>
+                  <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(34,197,94,0.1),transparent)]"></div>
+                  <div className="relative h-full flex items-center justify-center">
+                    <div className="text-5xl font-black gradient-text">
+                      {feature.title.charAt(0)}
+                    </div>
+                  </div>
+                  <div className="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-primary via-accent to-primary opacity-0 group-hover:opacity-100 transition-opacity"></div>
                 </div>
-                <h3 className="text-xl tracking-tight">{feature.title}</h3>
-                <p className="text-muted-foreground text-base">
+                <h3 className="text-xl font-bold tracking-tight group-hover:text-primary transition-colors">{feature.title}</h3>
+                <p className="text-muted-foreground text-base leading-relaxed">
                   {feature.description}
                 </p>
               </div>

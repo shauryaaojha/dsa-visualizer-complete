@@ -1,15 +1,15 @@
 "use client"
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
 import { Input } from "@/components/ui/input"
-import { Button } from "@/components/ui/button"
+import { Button } from "@/components/ui/Button"
 import { useState } from "react"
 import { useInfixConversion } from "@/hooks/use-infix-conversion"
 import { ConversionSteps } from "./conversion-steps"
 import { Token } from "./types"
 import { PostfixEvaluation } from "./postfix-evaluation"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 
 const EXAMPLE_EXPRESSION = "K+L-M*N+(O^P)*W/U/V*T+Q"
 
@@ -45,7 +45,7 @@ export function InfixPostfixVisualizer({ content }: InfixPostfixVisualizerProps)
           <TabsTrigger value="evaluation">Evaluation</TabsTrigger>
           <TabsTrigger value="explanation">Explanation</TabsTrigger>
         </TabsList>
-        
+
         <TabsContent value="conversion" className="space-y-6">
           <div className="grid grid-cols-1 xl:grid-cols-3 gap-6">
             <div className="xl:col-span-1 space-y-6">
@@ -62,14 +62,14 @@ export function InfixPostfixVisualizer({ content }: InfixPostfixVisualizerProps)
                     disabled={isConverting}
                   />
                   <div className="flex gap-2">
-                    <Button 
+                    <Button
                       onClick={handleConvert}
                       disabled={isConverting || !expression.trim()}
                       className="flex-1"
                     >
                       Convert to Postfix
                     </Button>
-                    <Button 
+                    <Button
                       variant="outline"
                       onClick={() => setExpression(EXAMPLE_EXPRESSION)}
                       disabled={isConverting}
@@ -111,7 +111,7 @@ export function InfixPostfixVisualizer({ content }: InfixPostfixVisualizerProps)
             </Card>
           )}
         </TabsContent>
-        
+
         <TabsContent value="explanation" className="prose prose-invert max-w-none">
           <MarkdownContent content={content} />
         </TabsContent>

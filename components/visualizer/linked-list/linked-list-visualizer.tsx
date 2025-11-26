@@ -1,7 +1,7 @@
 "use client"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 import { LinkedListDisplay } from "@/components/visualizer/linked-list/linked-list-display"
 import { LinkedListControls } from "@/components/visualizer/linked-list/linked-list-controls"
 import { LinkedListOperations } from "@/components/visualizer/linked-list/linked-list-operations"

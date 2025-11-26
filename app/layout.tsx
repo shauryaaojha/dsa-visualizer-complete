@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeProvider } from "@/components/global/theme-provider";
+import { AppShell } from "@/components/layout/AppShell";
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
@@ -17,20 +18,18 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            <div className="min-h-screen flex flex-col">
-              <div className="flex-1">
-                {children}
-              </div>
-            </div>
-            <Toaster />
-          </ThemeProvider>
+      <body className={inter.className} suppressHydrationWarning>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <AppShell>
+            {children}
+          </AppShell>
+          <Toaster />
+        </ThemeProvider>
       </body>
     </html>
   );

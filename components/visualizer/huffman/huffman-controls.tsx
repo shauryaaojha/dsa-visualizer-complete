@@ -1,9 +1,9 @@
 "use client"
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { useState } from "react"
+import { Button } from "@/components/ui/Button"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/Card"
+import { Input } from "@/components/ui/input"
 
 interface HuffmanControlsProps {
   onEncode: (text: string) => void
@@ -48,7 +48,7 @@ export function HuffmanControls({
               disabled={isAnimating}
               className="flex-1"
             />
-            <Button 
+            <Button
               onClick={handleEncode}
               disabled={isAnimating || !text.trim()}
             >

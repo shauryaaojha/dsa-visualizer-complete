@@ -1,9 +1,9 @@
 "use client"
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { MarkdownContent } from "@/components/shared/markdown-content"
+import { MarkdownContent } from "@/components/visualizer/ExplanationPanel"
 import { PolynomialMultiplication } from "./polynomial-multiplication"
-import { Card } from "@/components/ui/card"
+import { Card } from "@/components/ui/Card"
 
 interface PolynomialVisualizerProps {
   content: React.ReactNode
